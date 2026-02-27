@@ -1,6 +1,7 @@
 #include "selectionsort.h"
 
-void selection_sort(int arr[], size_t len) {
+void selection_sort(int arr[], size_t len)
+{
 	int low;
 	for (size_t i = 0; i < len; i++) {
 		low = i;

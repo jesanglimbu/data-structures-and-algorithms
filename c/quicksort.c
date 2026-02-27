@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void quick_sort(int arr[], int l, int r) {
+void quick_sort(int arr[], int l, int r)
+{
 	if (l < r) {
 		int pivot = partition(arr, l, r);
 		quick_sort(arr, l, pivot);
@@ -13,7 +14,8 @@ void quick_sort(int arr[], int l, int r) {
 	}
 }
 
-int partition(int arr[], int l, int r) {
+int partition(int arr[], int l, int r)
+{
 	int left, right;
 	left = l;
 	right = r;
