@@ -15,7 +15,8 @@ struct slist {
 struct slist *init_slist();
 bool is_empty(struct slist *l);
 int get_size(struct slist *l);
-int get_node(struct slist *l, int val);
+node *get_node(struct slist *l, int i);
+int search(struct slist *l, int val);
 void append(struct slist *l, int val);
 void delete(struct slist *l, int i);
 void insert(struct slist *l, int i, int val);

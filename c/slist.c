@@ -25,17 +25,52 @@ int get_size(list *l)
 	return l->size;
 }
 
-int get_node(list *l, int val)
+node *get_node(list *l, int i)
 {
-	int len = get_size(l);
+	if (is_empty(l)) {
+		return null;
+	}
+	
 	node *n = l->start;
-	for (int i = 0; i < len; i++) {
-		if (n->val == val) {
-			return i;
+	for (int j = 0; j < i; j++) {
+		if (n->next == null) {
+			return null;
+		} else {
+			n = n->next;
 		}
 	}
 
-	return -1;
+	return n;
+}
+
+void insert(list *l, int i, int val)
+{
+	if (i > l->size) {
+		printf("Index must be smaller than %d!\n", l->size);
+		return;
+	} else if (i < 0) {
+		printf("Index must be greater than 0!\n");
+		return;
+	} else if (i == l->size) {
+		append(l, val);
+		return;
+	} else {
+		// create new node
+		node *n = malloc(sizeof(node));
+		n->val = val;
+
+		if (i == 0) {
+			n->next = l->start;
+			l->start = n;
+		} else {
+			node *n1 = get_node(l, i-1); // node to be "replaced" by new node
+			node *n2 = n1->next; // new node's "next"
+			n1->next = n;
+			n->next = n2;
+		}
+
+		(l->size)++;
+	}
 }
 
 void append(list *l, int val)
@@ -49,9 +84,9 @@ void append(list *l, int val)
 		l->start = n;
 	} else {
 		l->end->next = n; // make end node point to new node
-		l->end = n; // make new node the end node
 	}
-	
+
+	l->end = n; // make new node the end node
 	(l->size)++;
 }
 
