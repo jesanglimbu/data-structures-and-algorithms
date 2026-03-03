@@ -45,7 +45,7 @@ int search_slist(list *l, int val)
 	} else {
 		node *n = l->start;
 		int i = 0;
-		while (n->next != null) {
+		while (i < l->size) {
 			if (n->val == val) {
 				return i;
 			} else {
