@@ -115,6 +115,17 @@ void append_slist(list *l, int val)
 	(l->size)++;
 }
 
+list *concat_slist(list *l1, list *l2)
+{
+	list *l = malloc(sizeof(list));
+	l->start = l1->start;
+	l1->end->next = l2->start;
+	l->end = l2->end;
+	l->size = l1->size + l2->size;
+
+	return l;
+}
+
 void delete_snode(list *l, int i)
 {
 	if (i < 0 || i > (l->size)-1) {

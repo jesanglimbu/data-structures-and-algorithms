@@ -19,6 +19,7 @@ void insert_slist(struct slist *l, int i, int val);
 int search_slist(struct slist *l, int val);
 void delete_snode(struct slist *l, int i);
 node *get_snode(struct slist *l, int i);
+struct slist *concat_slist(struct slist *l1, struct slist *l2);
 void delete_slist(struct slist *l);
 void print_slist(struct slist *l);
 
