@@ -91,10 +91,7 @@ void insert_slist(list *l, int i, int val)
 void delete_slist(list *l)
 {
 	free(l);
-	l = malloc(sizeof(list));
-	l->size = 0;
-	l->start = null;
-	l->end = null;
+	l = init_slist();
 }
 
 void append_slist(list *l, int val)
