@@ -78,8 +78,7 @@ void insert_slist(list *l, int i, int val)
 			n->next = l->start;
 			l->start = n;
 		} else {
-			node *n1 = get_snode(l, i-1); // node to be "replaced" by new node
-			                              // upper bound complexity: O(n)
+			node *n1 = get_snode(l, i-1); // node to be "replaced" by new node			                              // upper bound complexity: O(n)
 			node *n2 = n1->next; // new node's "next"
 			n1->next = n;
 			n->next = n2;
@@ -87,6 +86,15 @@ void insert_slist(list *l, int i, int val)
 
 		(l->size)++;
 	}
+}
+
+void delete_slist(list *l)
+{
+	free(l);
+	l = malloc(sizeof(list));
+	l->size = 0;
+	l->start = null;
+	l->end = null;
 }
 
 void append_slist(list *l, int val)
