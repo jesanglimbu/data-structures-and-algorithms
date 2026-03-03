@@ -45,7 +45,7 @@ int search_slist(list *l, int val)
 	} else {
 		node *n = l->start;
 		int i = 0;
-		while (i < l->size) {
+		while (i < l->size) { // upper bound complexity: O(n)
 			if (n->val == val) {
 				return i;
 			} else {
@@ -79,6 +79,7 @@ void insert_slist(list *l, int i, int val)
 			l->start = n;
 		} else {
 			node *n1 = get_snode(l, i-1); // node to be "replaced" by new node
+			                              // upper bound complexity: O(n)
 			node *n2 = n1->next; // new node's "next"
 			n1->next = n;
 			n->next = n2;
@@ -102,7 +103,29 @@ void append_slist(list *l, int val)
 	}
 
 	l->end = n; // make new node the end node
+	            // upper bound complexity O(1)
 	(l->size)++;
+}
+
+void delete_snode(list *l, int i)
+{
+	if (i < 0 || i > (l->size)-1) {
+		printf("Please enter a valid index to delete a node from the list!\n");
+	} else {
+		if (i == 0) {
+			node *n = l->start;
+			l->start = n->next;
+			free(n);
+		} else {
+			node *pn = get_snode(l, i-1);
+			node *n = pn->next;
+			node *nn = n->next;
+			free(n);
+			pn->next = nn;
+		}
+		
+		(l->size)--;
+	}
 }
 
 void print_slist(list *l)
