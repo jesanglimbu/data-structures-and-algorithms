@@ -1,19 +1,32 @@
 #include "stack.h"
-#include "dlist.h"
+#include "slist.h"
+#include <stdio.h>
 
 stack *init_stack()
 {
-	return init_dlist();
+	return init_slist();
 }
 
 void push(stack *st, int val)
 {
-	prepend_dlist(st, val);
+	prepend_slist(st, val);
 }
 
 void pop(stack *st)
 {
-	delete_dlist(st, (st->size)-1);
+	if (st->size == 0) {
+		printf("Stack is empty!\n");
+	} else {
+		delete_snode(st, 0);
+	}
 }
 
+void print_stack(stack *st)
+{
+	if (st->size == 0) {
+		printf("Stack is empty!\n");
+	} else {
+		print_slist(st);
+	}
+}
 

@@ -112,6 +112,22 @@ void append_slist(list *l, int val)
 	(l->size)++;
 }
 
+void prepend_slist(list *l, int val)
+{
+	node *n = malloc(sizeof(node));
+	n->val = val;
+	n->next = null;
+	
+	if (l->size == 0) { // Check if the list is empty
+		l->start = n;
+	} else {
+		n->next = l->start;
+		l->start = n;
+	}
+
+	(l->size)++;
+}
+
 list *concat_slist(list *l1, list *l2)
 {
 	list *l = malloc(sizeof(list));
