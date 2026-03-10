@@ -30,3 +30,7 @@ void print_stack(stack *st)
 	}
 }
 
+bool is_empty(stack *st)
+{
+	return st->size == 0;
+}
