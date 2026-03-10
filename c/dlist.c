@@ -47,10 +47,14 @@ void insert_dlist(list *l, int val, int index)
 void prepend_dlist(list *l, int val)
 {
 	dnode *n = malloc(sizeof(dnode));
-	n->val = val;
-	n->next = l->start;
-	l->start->prev = n;
-	l->start = n;
+	n->val = val;	
+	if (l->size == 0) { // if there are no nodes, we make the node the starting node
+		l->start = n;
+	} else {
+		n->next = l->start;
+		l->start->prev = n;
+		l->start = n;
+	}
 	(l->size)++;
 }
 
