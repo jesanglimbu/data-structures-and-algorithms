@@ -10,7 +10,7 @@ stack *init_stack();
 
 void push(stack *st, int val);
 
-void pop(stack *st);
+int pop(stack *st);
 
 bool isEmpty(stack *st);
 
