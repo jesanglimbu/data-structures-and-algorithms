@@ -32,8 +32,8 @@ void insert_dlist(list *l, int val, int index)
 		if (index == 0) {
 			prepend_dlist(l, val);
 		} else {
-			dnode *prev_node = get_dnode(l, index);
-			dnode *next_node = prev_node->next;
+			dnode *next_node = get_dnode(l, index);
+			dnode *prev_node = next_node->prev;
 			n->prev = prev_node;
 			n->next = next_node;
 			prev_node->next = n;
