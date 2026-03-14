@@ -37,6 +37,7 @@ dequeue(struct queue *q)
 {
 	struct task *current_task = q->first;
 	int val = current_task->val;
+	
 	q->first = current_task->next;
 	free(current_task);
 
