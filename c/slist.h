@@ -1,14 +1,15 @@
 #ifndef _SLIST_H_
 #define _SLIST_H_
 
-#include "snode.h"
 #include <stdbool.h>
 
-typedef struct snode node;
-
+typedef struct snode {
+	int val;
+	struct snode *next;
+} snode;
 struct slist {
-	node *start;
-	node *end;
+	snode *start;
+	snode *end;
 	int size;
 };
 
@@ -26,7 +27,7 @@ int search_slist(struct slist *l, int val);
 
 void delete_snode(struct slist *l, int i);
 
-node *get_snode(struct slist *l, int i);
+snode *get_snode(struct slist *l, int i);
 
 struct slist *concat_slist(struct slist *l1, struct slist *l2);
 

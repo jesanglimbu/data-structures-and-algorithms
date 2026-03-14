@@ -1,6 +1,7 @@
 #include "binarysearch.h"
 
-int binary_search(int arr[], size_t len, int v)
+int
+binary_search(int arr[], size_t len, int v)
 {
 	size_t l = 0;
 	size_t r = len-1;

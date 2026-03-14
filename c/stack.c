@@ -2,17 +2,20 @@
 #include "slist.h"
 #include <stdio.h>
 
-stack *init_stack()
+stack
+*init_stack()
 {
 	return init_slist();
 }
 
-void push(stack *st, int val)
+void
+push(stack *st, int val)
 {
 	prepend_slist(st, val);
 }
 
-int pop(stack *st)
+int
+pop(stack *st)
 {
 	if (st->size == 0) {
 		printf("Stack is empty!\n");
@@ -24,7 +27,8 @@ int pop(stack *st)
 	}
 }
 
-void print_stack(stack *st)
+void
+print_stack(stack *st)
 {
 	if (st->size == 0) {
 		printf("Stack is empty!\n");
@@ -33,7 +37,8 @@ void print_stack(stack *st)
 	}
 }
 
-bool is_empty(stack *st)
+bool
+is_empty(stack *st)
 {
 	return st->size == 0;
 }
