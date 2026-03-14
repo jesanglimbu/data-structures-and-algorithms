@@ -4,16 +4,22 @@
 #include <stdbool.h>
 #include "slist.h"
 
-typedef struct slist stack;
+struct item {
+	int val;
+	struct item *next;
+};
 
-stack *init_stack();
+struct stack {
+	int size;
+	struct item *top;
+};
 
-void push(stack *st, int val);
+struct stack *init_stack();
 
-int pop(stack *st);
+void push(struct stack *s, int val);
 
-bool isEmpty(stack *st);
+int pop(struct stack *s);
 
-void print_stack(stack *st);
+void print_stack(struct stack *s);
 
 #endif
