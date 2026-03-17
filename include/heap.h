@@ -15,4 +15,6 @@ int heap_height(heap_t *h);
 
 int heap_size(heap_t *h);
 
+void heap_print(heap_t *h);
+
 #endif

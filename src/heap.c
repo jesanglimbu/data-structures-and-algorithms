@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdio.h>
 
 #include "heap.h"
 #include "queue.h"
@@ -23,6 +24,7 @@ struct heap
 	struct heap *my_heap = malloc(sizeof(struct heap));
 	my_heap->root = NULL;
 	my_heap->size = 0;
+	my_heap->height = -1;
 
 	return my_heap;
 }
@@ -52,7 +54,7 @@ heap_insert(struct heap *h, int val)
 	struct heap_node *m = h->root;
 
 	if (h->height == -1) { 	
-		h->root = m;
+		h->root = n;
 		h->height++;
 	} else { /* Find the next position for the leaf. */
 		int height = 0;
@@ -60,7 +62,8 @@ heap_insert(struct heap *h, int val)
 			m = m->rchild;
 			height++;
 		}
-
+		
+		height++;
 		m->lchild = n;
 		n->parent = m;
 		
@@ -70,4 +73,3 @@ heap_insert(struct heap *h, int val)
 
 	h->size++;
 }
-
