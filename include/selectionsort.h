@@ -3,6 +3,6 @@
 
 #include <stddef.h>
 
-void selection_sort(int arr[], size_t len);
+void selectionsort(int arr[], size_t len);
 
 #endif

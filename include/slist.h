@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 
+/*
 typedef struct snode {
 	int val;
 	struct snode *next;
@@ -12,27 +13,30 @@ struct slist {
 	snode *end;
 	int size;
 };
+*/
 
-struct slist *init_slist();
+typedef struct slist slist_t;
 
-bool slist_is_empty(struct slist *l);
+slist_t *init_slist();
 
-void append_slist(struct slist *l, int val);
+bool slist_empty(slist_t *l);
 
-void prepend_slist(struct slist *l, int val);
+void append_slist(slist_t *l, int val);
 
-void insert_slist(struct slist *l, int i, int val);
+void prepend_slist(slist_t *l, int val);
 
-int search_slist(struct slist *l, int val);
+void insert_slist(slist_t *l, int i, int val);
 
-void delete_snode(struct slist *l, int i);
+int search_slist(slist_t *l, int val);
 
-snode *get_snode(struct slist *l, int i);
+void delete_snode(slist_t *l, int i);
 
-struct slist *concat_slist(struct slist *l1, struct slist *l2);
+/*snode *get_snode(slist_t *l, int i);*/
 
-void delete_slist(struct slist *l);
+slist_t *concat_slist(slist_t *l1, slist_t *l2);
 
-void print_slist(struct slist *l);
+void delete_slist(slist_t *l);
+
+void print_slist(slist_t *l);
 
 #endif

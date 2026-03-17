@@ -3,6 +3,6 @@
 
 #include <stddef.h>
 
-void bubble_sort(int arr[], size_t len);
+void bubblesort(int arr[], size_t len);
 
 #endif

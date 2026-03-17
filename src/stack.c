@@ -4,8 +4,18 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+struct stack_node {
+	int val;
+	struct stack_node *next;
+};
+
+struct stack {
+	int size;
+	struct stack_node *top;
+};
+
 struct stack
-*init_stack()
+*stack_init()
 {
 	struct stack *my_stack = malloc(sizeof(struct stack));
 	my_stack->size = 0;
@@ -15,37 +25,37 @@ struct stack
 }
 
 void
-push(struct stack *s, int val)
+stack_push(struct stack *s, int val)
 {
 	/* Allocate and initialize an item on the stack */
-	struct item *my_item = malloc(sizeof(struct item));
-	my_item->val = val;
-	my_item->next = NULL;
+	struct stack_node *my_node = malloc(sizeof(struct stack_node));
+	my_node->val = val;
+	my_node->next = NULL;
 
 	/* Update the stack's top item */
 	if (s->size > 0) {
-		my_item->next = s->top;
+		my_node->next = s->top;
 	}
 	
-	s->top = my_item;
+	s->top = my_node;
 
 	(s->size)++;
 }
 
 int
-pop(struct stack *s)
+stack_pop(struct stack *s)
 {
 	if (s->size == 0) {
 		printf("Stack is empty!\n");
 		return -1;
 	} else {
 		/* Get the item and its value that we want to delete */
-		struct item *my_item = s->top;
-		int val = my_item->val;
+		struct stack_node *my_node = s->top;
+		int val = my_node->val;
 
 		/* Update the stack's top item and delete our old item */
-		s->top = my_item->next;
-		free(my_item);
+		s->top = my_node->next;
+		free(my_node);
 
 		s->size--;
 		
@@ -54,15 +64,15 @@ pop(struct stack *s)
 }
 
 void
-print_stack(struct stack *s)
+stack_print(struct stack *s)
 {
 	if (s->size == 0) {
 		printf("Stack is empty!\n");
 	} else {
-		struct item *my_item = s->top;
+		struct stack_node *my_node = s->top;
 		for (int i = 0; i < s->size; i++) {
-			printf("%d ", my_item->val);
-			my_item = my_item->next;
+			printf("%d ", my_node->val);
+			my_node = my_node->next;
 		}
 		printf("\n");
 	}

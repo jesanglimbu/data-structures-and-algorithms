@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 struct queue
-*init_queue()
+*queue_init()
 {
 	/* Allocate and initialize a queue */
 	struct queue *my_queue = malloc(sizeof(struct queue));
@@ -47,7 +47,7 @@ dequeue(struct queue *q)
 }
 
 void
-print_queue(struct queue *q)
+queue_print(struct queue *q)
 {
 	if (q->size == 0) {
 		printf("No tasks in the queue!\n");

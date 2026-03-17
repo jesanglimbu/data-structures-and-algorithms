@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "slist.h"
 
+/*
 struct item {
 	int val;
 	struct item *next;
@@ -13,13 +14,16 @@ struct stack {
 	int size;
 	struct item *top;
 };
+*/
 
-struct stack *init_stack();
+typedef struct stack stack_t;
 
-void push(struct stack *s, int val);
+stack_t *stack_init();
 
-int pop(struct stack *s);
+void stack_push(stack_t *s, int val);
 
-void print_stack(struct stack *s);
+int stack_pop(stack_t *s);
+
+void stack_print(stack_t *s);
 
 #endif

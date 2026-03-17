@@ -3,21 +3,19 @@
 
 #include <stdbool.h>
 
-typedef struct node node;
-typedef struct bst bst;
+typedef struct bst bst_t;
+typedef struct bst_node bst_node_t;
 
-bst *init_bst();
+bst_t *bst_init();
 
-void insert_bst(bst *t, int val);
+void bst_insert(bst_t *t, int val);
 
-void destroy_bst(bst *t);
+void bst_destroy(bst_t *t);
 
-node *get_root(bst *t);
+bst_node_t *bst_root(bst_t *t);
 
-bool dfs(bst *t, node *n, int val);
+bool bst_dfs(bst_t *t, bst_node_t *n, int val);
 
-bool bfs(bst *t, node *n, int val);
-
-int get_val(node *n);
+bool bst_bfs(bst_t *t, bst_node_t *n, int val);
 
 #endif

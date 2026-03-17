@@ -3,27 +3,27 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-struct node {
+struct bst_node {
 	int val;
-	struct node *parent;
-	struct node *rchild;
-	struct node *lchild;
+	struct bst_node *parent;
+	struct bst_node *rchild;
+	struct bst_node *lchild;
 };
 
 struct bst {
-	struct node *root;
+	struct bst_node *root;
 	int size;
 	int height;
 };
 
 int
-get_val(struct node *n)
+get_val(struct bst_node *n)
 {
 	return n->val;
 }
 
 struct bst
-*init_bst()
+*bst_init()
 {
 	struct bst *my_bst = malloc(sizeof(struct bst));
 	my_bst->root = NULL;
@@ -33,16 +33,16 @@ struct bst
 	return my_bst;
 }
 
-struct node
-*get_root(struct bst *t)
+struct bst_node
+*bst_root(struct bst *t)
 {
 	return t->root;
 }
 
 void
-insert_bst(struct bst *t, int val)
+bst_insert(struct bst *t, int val)
 {
-	struct node *n = malloc(sizeof(struct node));
+	struct bst_node *n = malloc(sizeof(struct bst_node));
 	n->val = val;
 	n->rchild = NULL;
 	n->lchild = NULL;
@@ -50,7 +50,7 @@ insert_bst(struct bst *t, int val)
 	if (t->size == 0) {
 		t->root = n;
 	} else {
-		struct node *m = t->root;
+		struct bst_node *m = t->root;
 		/* Traversing the tree. */
 		while (n->parent == NULL) { /* Invariant: n guaranteed to have a parent by the end */
 			if (val > m->val) {
@@ -79,22 +79,17 @@ insert_bst(struct bst *t, int val)
 }
 
 bool
-dfs (struct bst *t, struct node *n, int val)
+bst_dfs (struct bst *t, struct bst_node *n, int val)
 {
-	if (n == NULL) {
+	if (n == NULL) { /* Base case 1 */
 		return false;
-	} else if (n->val == val) {
+	} else if (n->val == val) { /* Base case 2 */
 		return true;
-	} else if (dfs(t, n->lchild, val)) {
+	} else if (bst_dfs(t, n->lchild, val)) {
 		return true;
 	} else {
-		return dfs(t, n->rchild, val);
+		return bst_dfs(t, n->rchild, val);
 	}
 }
 
-void
-clear_bst(struct bst *t)
-{
-	free(t);
-	t = init_bst();
-}
+// TO DO: bfs_destroy(struct bst *t)

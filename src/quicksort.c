@@ -5,17 +5,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void
-quick_sort(int arr[], int l, int r)
-{
-	if (l < r) {
-		int pivot = partition(arr, l, r);
-		quick_sort(arr, l, pivot);
-		quick_sort(arr, pivot+1, r);
-	}
-}
-
-
 /* In this implementation, we use Hoare's partitioning algorithm. */
 int
 partition(int arr[], int l, int r)
@@ -56,3 +45,12 @@ partition(int arr[], int l, int r)
 	return left;
 }
 	       
+void
+quicksort(int arr[], int l, int r)
+{
+	if (l < r) {
+		int pivot = partition(arr, l, r);
+		quicksort(arr, l, pivot);
+		quicksort(arr, pivot+1, r);
+	}
+}

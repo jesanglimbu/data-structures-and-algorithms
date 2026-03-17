@@ -20,8 +20,8 @@ void enqueue(struct queue *q, int val);
 
 int dequeue(struct queue *q);
 
-void print_queue(struct queue *q);
+void queue_print(struct queue *q);
 
-bool is_empty(struct queue *q);
+bool queue_empty(struct queue *q);
 
 #endif

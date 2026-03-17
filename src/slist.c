@@ -1,38 +1,47 @@
 #include "slist.h"
 #include <stdlib.h>
 #include <stdio.h>
-#define null (void*)0
 
-typedef struct slist list;
+struct slist_node {
+	int val;
+	struct slist_node *next;
+};
+
+struct slist {
+	struct slist_node *start;
+	struct slist_node *end;
+	int size;
+};
+
 
 bool
-slist_is_empty(list *l)
+slist_empty(struct slist *l)
 {
 	return l->size == 0;
 }
 
-list
-*init_slist()
+struct slist
+*slist_init()
 {
-	list *list = malloc(sizeof(list));
+	struct slist *list = malloc(sizeof(struct slist));
 	list->size = 0;
-	list->start = null;
-	list->end = null;
+	list->start = NULL;
+	list->end = NULL;
 
 	return list;
 }
 
-snode
-*get_snode(list *l, int i)
+struct slist_node
+*slist_node(struct slist *l, int i)
 {
-	if (slist_is_empty(l)) {
-		return null;
+	if (slist_empty(l)) {
+		return NULL;
 	}
 	
-	snode *n = l->start;
+	struct slist_node *n = l->start;
 	for (int j = 0; j < i; j++) {
-		if (n->next == null) {
-			return null;
+		if (n->next == NULL) {
+			return NULL;
 		} else {
 			n = n->next;
 		}
@@ -42,12 +51,12 @@ snode
 }
 
 int
-search_slist(list *l, int val)
+slist_search(struct slist *l, int val)
 {
-	if (slist_is_empty(l)) {
+	if (slist_empty(l)) {
 		return -1;
 	} else {
-		snode *n = l->start;
+		struct slist_node *n = l->start;
 		int i = 0;
 		while (i < l->size) {
 			if (n->val == val) {
@@ -63,51 +72,13 @@ search_slist(list *l, int val)
 }
 
 void
-insert_slist(list *l, int i, int val)
-{
-	if (i > l->size) {
-		printf("Index must be smaller than %d!\n", l->size);
-		return;
-	} else if (i < 0) {
-		printf("Index must be greater than 0!\n");
-		return;
-	} else if (i == l->size) {
-		append_slist(l, val);
-		return;
-	} else {
-		// create new node
-		snode *n = malloc(sizeof(snode));
-		n->val = val;
-
-		if (i == 0) {
-			n->next = l->start;
-			l->start = n;
-		} else {
-			snode *n1 = get_snode(l, i-1); // node to be "replaced" by new node			                              // upper bound complexity: O(n)
-			snode *n2 = n1->next; // new node's "next"
-			n1->next = n;
-			n->next = n2;
-		}
-
-		(l->size)++;
-	}
-}
-
-void
-delete_slist(list *l)
-{
-	free(l);
-	l = init_slist();
-}
-
-void
-append_slist(list *l, int val)
+slist_append(struct slist *l, int val)
 {
 	/* Create new node with value given by parameter */
-	snode *n = malloc(sizeof(snode));
+	struct slist_node *n = malloc(sizeof(struct slist_node));
 	n->val = val;
 
-	if (slist_is_empty(l)) {
+	if (slist_empty(l)) {
 		l->start = n;
 	} else {
 		l->end->next = n; /* Current last node will point to our new last node */
@@ -118,12 +89,43 @@ append_slist(list *l, int val)
 }
 
 void
-prepend_slist(list *l, int val)
+slist_insert(struct slist *l, int i, int val)
+{
+	if (i > l->size) {
+		printf("Index must be smaller than %d!\n", l->size);
+		return;
+	} else if (i < 0) {
+		printf("Index must be greater than 0!\n");
+		return;
+	} else if (i == l->size) {
+		slist_append(l, val);
+		return;
+	} else {
+		// create new node
+		struct slist_node *n = malloc(sizeof(struct slist_node));
+		n->val = val;
+
+		if (i == 0) {
+			n->next = l->start;
+			l->start = n;
+		} else {
+			struct slist_node *n1 = slist_node(l, i-1); // node to be "replaced" by new node
+			struct slist_node *n2 = n1->next; // new node's "next"
+			n1->next = n;
+			n->next = n2;
+		}
+
+		(l->size)++;
+	}
+}
+
+void
+slist_prepend(struct slist *l, int val)
 {
 	/* Create a new node with value given by parameter */
-	snode *n = malloc(sizeof(snode));
+	struct slist_node *n = malloc(sizeof(struct slist_node));
 	n->val = val;
-	n->next = null;
+	n->next = NULL;
 	
 	if (l->size == 0) {
 		l->start = n;
@@ -138,11 +140,11 @@ prepend_slist(list *l, int val)
 	(l->size)++;
 }
 
-list
-*concat_slist(list *l1, list *l2)
+struct slist
+*slist_concat(struct slist *l1, struct slist *l2)
 {
 	/* Create a new list */
-	list *l = malloc(sizeof(list));
+	struct slist *l = malloc(sizeof(struct slist));
 	l->size = l1->size + l2->size;
 
 	/* Label the starting node of our new list as the start node of the first list */
@@ -159,13 +161,13 @@ list
 }
 
 void
-delete_snode(list *l, int i)
+slist_delete(struct slist *l, int i)
 {
 	if (i < 0 || i > (l->size)-1) {
 		printf("Please enter a valid index to delete a node from the list!\n");
 	} else {
 		if (i == 0) {
-			snode *n = l->start;
+			struct slist_node *n = l->start;
 			l->start = n->next;
 			free(n);
 		} else {
@@ -173,11 +175,11 @@ delete_snode(list *l, int i)
 			  Get the nodes that are before and after the node we
 			  want to delete
 			*/
-			snode *pn = get_snode(l, i-1);
-			snode *nn = pn->next->next;
+			struct slist_node *pn = slist_node(l, i-1);
+			struct slist_node *nn = pn->next->next;
 			
 			/* Delete our node */
-			snode *n = pn->next; 
+			struct slist_node *n = pn->next; 
 			free(n);
 
 			/*
@@ -193,13 +195,13 @@ delete_snode(list *l, int i)
 }
 
 void
-print_slist(list *l)
+slist_print(struct slist *l)
 {
 	if (l->size == 0) {
 		printf("List is empty!\n");
 	} else {
 		int len = l->size;
-		snode *n = l->start;
+		struct slist_node *n = l->start;
 		for (int i = 0; i < len; i++) {
 			printf("%d ", n->val);
 			n = n->next;

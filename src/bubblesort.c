@@ -2,7 +2,7 @@
 #include <stdbool.h>
 
 void
-bubble_sort(int arr[], size_t len)
+bubblesort(int arr[], size_t len)
 {
 	size_t i = 0;
 	bool swapped = true;

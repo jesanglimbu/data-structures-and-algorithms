@@ -2,10 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define null (void*)0
-
 int
-*merge_sort(int arr[], size_t l, size_t r)
+*mergesort(int arr[], size_t l, size_t r)
 {
 	size_t m = (r + l) / 2;
 	if (r - l > 1) {
@@ -20,14 +18,14 @@ int
 		subarray(a2, arr, m, r);
 
 		/* Our recursive call to sort the array. */
-		return merge(merge_sort(a1, 0, len1), len1, merge_sort(a2, 0, len2), len2);
+		return merge(mergesort(a1, 0, len1), len1, mergesort(a2, 0, len2), len2);
 	} else if (r - l == 1) { /* Base case: if subarray is length 1 */
 		int *tmp = malloc(sizeof(int)); /* Return the element */
 		tmp[0] = arr[l];
 		return tmp;
 	}
 
-	return null; /* Base case: if subarray is length < 1, we return a null pointer */
+	return NULL; /* Base case: if subarray is length < 1, we return a null pointer */
 
 }
 

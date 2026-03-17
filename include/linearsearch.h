@@ -2,6 +2,6 @@
 #define _LINEARSEARCH_H_
 #include <stddef.h>
 
-int linear_search(int arr[], size_t size, int v);
+int linearsearch(int arr[], size_t size, int v);
 
 #endif
