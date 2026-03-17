@@ -18,4 +18,6 @@ bool dfs(bst *t, node *n, int val);
 
 bool bfs(bst *t, node *n, int val);
 
+int get_val(node *n);
+
 #endif

@@ -16,6 +16,12 @@ struct bst {
 	int height;
 };
 
+int
+get_val(struct node *n)
+{
+	return n->val;
+}
+
 struct bst
 *init_bst()
 {
@@ -43,33 +49,33 @@ insert_bst(struct bst *t, int val)
 	n->parent = NULL;
 	if (t->size == 0) {
 		t->root = n;
-		t->height++;
 	} else {
-		struct node *parent = t->root;
+		struct node *m = t->root;
 		/* Traversing the tree. */
-		if (val < parent->val) {
-			/* We go to the left if val < parent */
-			if (parent->lchild == NULL) {
-				/* If the left child is empty, we insert the node here */
-				parent->lchild = n;
-				n->parent = parent;
+		while (n->parent == NULL) { /* Invariant: n guaranteed to have a parent by the end */
+			if (val > m->val) {
+				if (m->rchild == NULL) {
+					/* We place the node to the right */
+					m->rchild = n;
+					n->parent = m;
+				} else {
+					m = m->rchild; /* Keep traversing */
+				}
 			} else {
-				/* Otherwise, keep traversing the tree. */
-				parent = parent->lchild;
-			}
-		} else {
-			/* We go right if the val >= parent */
-			if (parent->rchild == NULL) {
-				/* If right child is empty, we insert the node here. */
-				parent->rchild = n;
-				n->parent = parent;
-			} else {
-				/* Otherwise, keep traversing. */
-				parent = parent->rchild;
+				if (m->lchild == NULL) {
+					/* Place the node to the left */
+					m->lchild = n;
+					n->parent = m;
+				} else {
+					/* Keep traversing */
+					m = m->lchild;
+				}
 			}
 		}
-		
 	}
+	
+	/* Increase the size after all that! */
+	t->size++;
 }
 
 bool
@@ -84,4 +90,11 @@ dfs (struct bst *t, struct node *n, int val)
 	} else {
 		return dfs(t, n->rchild, val);
 	}
+}
+
+void
+clear_bst(struct bst *t)
+{
+	free(t);
+	t = init_bst();
 }
