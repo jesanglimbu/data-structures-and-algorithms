@@ -51,24 +51,32 @@ heap_insert(struct heap *h, int val)
 	n->rchild = NULL;
 	
 	
-	struct heap_node *m = h->root;
+	struct heap_node *m = h->root; /* This will be the node that will have a
+					  free space one one of its child */
 
 	if (h->height == -1) { 	
 		h->root = n;
 		h->height++;
 	} else { /* Find the next position for the leaf. */
 		int height = 0;
-		while (m->lchild != NULL) {
-			m = m->rchild;
+		while (m->lchild != NULL && m->rchild != NULL) {
+			/* Invariant: have to go left if both nodes are occupied */
+			m = m->lchild;
 			height++;
 		}
-		
+
+		if (m->lchild == NULL) {
+			m->lchild = n;
+			n->parent = m;
+		} else {
+			m->rchild = n;
+			n->parent = m;
+		}
 		height++;
-		m->lchild = n;
-		n->parent = m;
-		
-		if (height > h->height)
+
+		if (height > h->height) {
 			h->height++;
+		}
 	}
 
 	h->size++;
