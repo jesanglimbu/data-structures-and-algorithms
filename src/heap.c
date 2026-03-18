@@ -51,7 +51,7 @@ heap_insert(struct heap *h, int val)
 {
 	size_t size = h->size;
 	
-	if (size > MAXSIZE) {
+	if (size >= MAXSIZE) {
 		return HEAP_FULL;
 	} else {
 		if (h->size == 0) {
