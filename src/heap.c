@@ -9,7 +9,11 @@
 #include <stdio.h>
 
 #include "heap.h"
+
 #define MAXSIZE 10
+
+static void bubble_up(struct heap *h, int index);
+static void bubble_down(struct heap *h);
 
 struct heap {
 	int heap_arr[MAXSIZE];
@@ -23,26 +27,6 @@ struct heap
 	my_heap->size = 0;
 
 	return my_heap;
-}
-
-enum HeapStatus
-heap_insert(struct heap *h, int val)
-{
-	/* TO DO */
-	size_t size = h->size;
-	
-	if (size > MAXSIZE) {
-		return HEAP_FULL;
-	} else {
-		if (h->size == 0) {
-			h->heap_arr[size] = val;
-		} else {
-			h->heap_arr[size] = val;
-		}
-		h->size++;
-	}
-
-	return HEAP_OK;
 }
 
 int
@@ -60,4 +44,42 @@ heap_max(struct heap *h, int *out)
 		
 	*out = h->heap_arr[0];
 	return HEAP_OK;
+}
+
+enum HeapStatus
+heap_insert(struct heap *h, int val)
+{
+	size_t size = h->size;
+	
+	if (size > MAXSIZE) {
+		return HEAP_FULL;
+	} else {
+		if (h->size == 0) {
+			h->heap_arr[size] = val;
+		} else {
+			h->heap_arr[size] = val;
+			bubble_up(h, size);
+		}
+		
+		h->size++;
+	}
+
+	return HEAP_OK;
+}
+
+static void
+bubble_up(struct heap *h, int i)
+{
+	while (i > 0 && h->heap_arr[i] > h->heap_arr[(i-1)/2]) {
+		int tmp = h->heap_arr[i];
+		h->heap_arr[i] = h->heap_arr[(i-1)/2];
+		h->heap_arr[(i-1)/2] = tmp;
+		i = (i-1)/2;
+	}
+}
+
+static void
+bubble_down(struct heap *h)
+{
+	/* TO DO */
 }
