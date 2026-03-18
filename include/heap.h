@@ -3,15 +3,19 @@
 
 typedef struct heap heap_t;
 
+enum HeapStatus {
+	HEAP_OK,
+	HEAP_EMPTY,
+	HEAP_FULL,
+};
+
 heap_t *heap_init();
 
-void heap_insert(heap_t *h, int val);
+enum HeapStatus heap_insert(heap_t *h, int val);
 
-int heap_max(heap_t *h);
+enum HeapStatus heap_max(heap_t *h, int *out);
 
-int heap_delete_max(heap_t *h);
-
-int heap_height(heap_t *h);
+enum HeapStatus heap_delete_max(heap_t *h);
 
 int heap_size(heap_t *h);
 
