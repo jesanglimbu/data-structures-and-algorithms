@@ -17,6 +17,8 @@ enum HeapStatus heap_max(heap_t *h, int *out);
 
 enum HeapStatus heap_delete_max(heap_t *h);
 
+enum HeapStatus heap_delete(heap_t *h, int i);
+
 int heap_size(heap_t *h);
 
 void heap_print(heap_t *h);

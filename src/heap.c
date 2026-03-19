@@ -11,14 +11,14 @@
 
 #include "heap.h"
 
-#define MAXSIZE 50
+#define MAXSIZE 100
 
 static void bubble_up(struct heap *h, int index);
 static void bubble_down(struct heap *h, int index);
 
 struct heap {
 	int heap_arr[MAXSIZE];
-	size_t size;
+	int size;
 };
 
 struct heap
@@ -50,9 +50,9 @@ heap_max(struct heap *h, int *out)
 enum HeapStatus
 heap_insert(struct heap *h, int val)
 {
-	size_t size = h->size;
+	int size = h->size;
 	
-	if (size >= MAXSIZE) {
+	if (size + 1 == MAXSIZE) {
 		return HEAP_FULL;
 	} else {
 		if (h->size == 0) {
@@ -71,26 +71,37 @@ heap_insert(struct heap *h, int val)
 enum HeapStatus
 heap_delete_max(struct heap *h)
 {
+	return heap_delete(h, 0);
+}
+
+enum HeapStatus
+heap_delete(struct heap *h, int i)
+{
 	if (h->size == 0) {
 		return HEAP_EMPTY;
 	}
 
-	/* Replace root with the last node. */
-	int tmp = h->heap_arr[h->size];
-	h->heap_arr[h->size] = -1;
+	/* Replace node at ith position with the last node */
+	int val = h->heap_arr[i];
+	h->heap_arr[i] = h->heap_arr[h->size];
+
+	if (h->heap_arr[i] > val) { /* If last node is bigger
+				       than current node we bubble up */
+
+		bubble_up(h, i);	
+	} else {
+		bubble_down(h, i);
+	}
+
 	h->size--;
-	h->heap_arr[0] = tmp;
-
-	/* Bubble down to maintain heap structure */
-	bubble_down(h, 0);
-
 	return HEAP_OK;
+
 }
 
 static void
 bubble_up(struct heap *h, int i)
 {
-	while (i >= 0 && h->heap_arr[i] > h->heap_arr[(i-1)/2]) {
+	while (h->heap_arr[i] > h->heap_arr[(i-1)/2]) {
 		/* Keep swapping node and parent until
 		   node is smaller or equal to parent
 		*/
@@ -113,7 +124,6 @@ bubble_down(struct heap *h, int i)
 	int lc = (i*2) + 1; /* Left child */
 	int rc = (i*2) + 2; /* Right child */
 
-	/* We keep looping if parent is smaller than one or both children */
 	while (h->heap_arr[i] < h->heap_arr[lc] || h->heap_arr[i] < h->heap_arr[rc]) {
 		/* First check that left child is bigger/equal than right child */
 		if (h->heap_arr[lc] >= h->heap_arr[rc]) {
