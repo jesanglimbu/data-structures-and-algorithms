@@ -1,7 +1,6 @@
 #include "bst.h"
 #include <stddef.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 struct bst_node {
 	int val;
@@ -16,10 +15,19 @@ struct bst {
 	int height;
 };
 
-int
-get_val(struct bst_node *n)
+static struct bst_node *node_init();
+static int dfs(struct bst *t, struct bst_node *n, int val);
+
+static struct bst_node
+*node_init(int val)
 {
-	return n->val;
+	struct bst_node *n = malloc(sizeof(struct bst_node));
+	n->val = val;
+	n->parent = NULL;
+	n->lchild = NULL;
+	n->rchild = NULL;
+
+	return n;
 }
 
 struct bst
@@ -33,20 +41,11 @@ struct bst
 	return my_bst;
 }
 
-struct bst_node
-*bst_root(struct bst *t)
-{
-	return t->root;
-}
-
 void
 bst_insert(struct bst *t, int val)
 {
-	struct bst_node *n = malloc(sizeof(struct bst_node));
-	n->val = val;
-	n->rchild = NULL;
-	n->lchild = NULL;
-	n->parent = NULL;
+	struct bst_node *n = node_init(val);
+
 	if (t->size == 0) {
 		t->root = n;
 	} else {
@@ -78,18 +77,32 @@ bst_insert(struct bst *t, int val)
 	t->size++;
 }
 
-bool
-bst_dfs (struct bst *t, struct bst_node *n, int val)
+int
+bst_dfs (struct bst *t, int val)
 {
-	if (n == NULL) { /* Base case 1 */
-		return false;
-	} else if (n->val == val) { /* Base case 2 */
-		return true;
-	} else if (bst_dfs(t, n->lchild, val)) {
-		return true;
+	struct bst_node *n = t->root;
+	
+	if (n == NULL) { /* Empty tree */
+		return -1;
+	} else if (n->val == val) { 
+		return 0;
+	} else if (dfs(t, n->lchild, val) != -1) {
+		return 0;
 	} else {
-		return bst_dfs(t, n->rchild, val);
+		return dfs(t, n->rchild, val);
 	}
 }
 
-// TO DO: bfs_destroy(struct bst *t)
+int
+dfs(struct bst *t, struct bst_node *n, int val)
+{
+	if (n == NULL) { /* First base case */
+		return -1;
+	} else if (n->val == val) { /* Second base case */
+		return 0;
+	} else if (dfs(t, n->lchild, val) != -1) {
+		return 0;
+	} else {
+		return dfs(t, n->rchild, val);
+	}	
+}
