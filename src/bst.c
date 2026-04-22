@@ -1,108 +1,79 @@
 #include "bst.h"
-#include <stddef.h>
 #include <stdlib.h>
+
 
 struct bst_node {
 	int val;
-	struct bst_node *parent;
 	struct bst_node *rchild;
 	struct bst_node *lchild;
+	struct bst_node *parent;
 };
 
 struct bst {
 	struct bst_node *root;
 	int size;
-	int height;
 };
-
-static struct bst_node *node_init();
-static int dfs(struct bst *t, struct bst_node *n, int val);
-
-static struct bst_node
-*node_init(int val)
-{
-	struct bst_node *n = malloc(sizeof(struct bst_node));
-	n->val = val;
-	n->parent = NULL;
-	n->lchild = NULL;
-	n->rchild = NULL;
-
-	return n;
-}
 
 struct bst
 *bst_init()
 {
+	/* Initialise bst */
 	struct bst *my_bst = malloc(sizeof(struct bst));
+
 	my_bst->root = NULL;
 	my_bst->size = 0;
-	my_bst->height = -1;
 
 	return my_bst;
 }
 
 void
-bst_insert(struct bst *t, int val)
+bst_insert(struct bst *bst, int val)
 {
-	struct bst_node *n = node_init(val);
-
-	if (t->size == 0) {
-		t->root = n;
+	struct bst_node *n = malloc(sizeof(struct bst_node));
+	n->val = val;
+	n->rchild = NULL;
+	n->lchild = NULL;
+	n->parent = NULL;
+	
+	if (bst->size == 0) {
+		bst->root = n;
 	} else {
-		struct bst_node *m = t->root;
-		/* Traversing the tree. */
-		while (n->parent == NULL) { /* Invariant: n guaranteed to have a parent by the end */
-			if (val > m->val) {
-				if (m->rchild == NULL) {
-					/* We place the node to the right */
-					m->rchild = n;
+		struct bst_node *m = bst->root;
+		while (n->parent == NULL) {
+			if (val < m->val) {
+				if (m->lchild == NULL) {
 					n->parent = m;
+					m->lchild = n;
 				} else {
-					m = m->rchild; /* Keep traversing */
+					m = m->lchild;
 				}
 			} else {
-				if (m->lchild == NULL) {
-					/* Place the node to the left */
-					m->lchild = n;
+				if (m->rchild == NULL) {
 					n->parent = m;
+					m->rchild = n;
 				} else {
-					/* Keep traversing */
-					m = m->lchild;
+					m = m->rchild;
 				}
 			}
 		}
 	}
-	
-	/* Increase the size after all that! */
-	t->size++;
+
+	bst->size++;
 }
 
 int
-bst_dfs (struct bst *t, int val)
+bst_search(struct bst *bst, int val)
 {
-	struct bst_node *n = t->root;
-	
-	if (n == NULL) { /* Empty tree */
-		return -1;
-	} else if (n->val == val) { 
-		return 0;
-	} else if (dfs(t, n->lchild, val) != -1) {
-		return 0;
-	} else {
-		return dfs(t, n->rchild, val);
+	struct bst_node *n = bst->root;
+	while (n != NULL) {
+		if (val == n->val) {
+			return n->val;
+		} else if (val < n->val) {
+			n = n->lchild;
+		} else {
+			n = n->rchild;
+		}
 	}
-}
 
-int
-dfs(struct bst *t, struct bst_node *n, int val)
-{
-	if (n == NULL) { /* First base case */
-		return -1;
-	} else if (n->val == val) { /* Second base case */
-		return 0;
-	} else if (dfs(t, n->lchild, val) != -1) {
-		return 0;
-	} else {
-		return dfs(t, n->rchild, val);
-	}	
+	return -1;
 }
