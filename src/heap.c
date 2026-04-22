@@ -1,152 +1,113 @@
-/*
-  In this implementation, I use a static array for the heap.
-  This is the way that was taught in my lectures so I will
-  implement it that way in here.
-*/
-
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <math.h>
-
 #include "heap.h"
-
-#define MAXSIZE 100
-
-static void bubble_up(struct heap *h, int index);
-static void bubble_down(struct heap *h, int index);
+#include <stdlib.h>
+#include <stdio.h>
 
 struct heap {
-	int heap_arr[MAXSIZE];
+	int *arr;
 	int size;
+	int capacity;
 };
 
+static void sift_up(struct heap *h, int i);
+static void sift_down(struct heap *h, int i);
+
 struct heap
-*heap_init()
+*heap_init(int cap)
 {
 	struct heap *my_heap = malloc(sizeof(struct heap));
+
 	my_heap->size = 0;
+	
+	/* Initial capacity of array will be cap */
+	my_heap->capacity = cap; 
+	my_heap->arr = malloc(cap * sizeof(int));
 
 	return my_heap;
 }
 
-int
-heap_size(struct heap *h)
-{
-	return h->size;
-}
-
-enum HeapStatus
-heap_max(struct heap *h, int *out)
-{
-	if (h->size == 0) {
-		return HEAP_EMPTY;
-	}
-		
-	*out = h->heap_arr[0];
-	return HEAP_OK;
-}
-
-enum HeapStatus
+void
 heap_insert(struct heap *h, int val)
 {
 	int size = h->size;
+	const int capacity = h->capacity;
+	int *heap_arr = h->arr;
 	
-	if (size + 1 == MAXSIZE) {
-		return HEAP_FULL;
-	} else {
-		if (h->size == 0) {
-			h->heap_arr[size] = val;
-		} else {
-			h->heap_arr[size] = val;
-			bubble_up(h, size);
-		}
-		
-		h->size++;
+	/* Check if adding a child indexes out of bounds */
+	if (size >= capacity) {
+		heap_arr = realloc(heap_arr, 2 * capacity * sizeof(int));
 	}
-
-	return HEAP_OK;
+	
+	/* Add node at the next free space then sift up */
+	heap_arr[size] = val;
+	sift_up(h, size);
+	
+	h->size++;
 }
 
-enum HeapStatus
-heap_delete_max(struct heap *h)
-{
-	return heap_delete(h, 0);
-}
-
-enum HeapStatus
-heap_delete(struct heap *h, int i)
+int
+heap_pop(struct heap *h)
 {
 	if (h->size == 0) {
-		return HEAP_EMPTY;
-	}
-
-	/* Replace node at ith position with the last node */
-	int val = h->heap_arr[i];
-	h->heap_arr[i] = h->heap_arr[h->size];
-
-	if (h->heap_arr[i] > val) { /* If last node is bigger
-				       than current node we bubble up */
-
-		bubble_up(h, i);	
-	} else {
-		bubble_down(h, i);
+		fprintf(stderr, "heap: can't pop at size 0");
 	}
 
 	h->size--;
-	return HEAP_OK;
+	int *heap_arr = h->arr;
 
+	int ret = heap_arr[0];
+	int n = heap_arr[h->size];
+	
+	heap_arr[0] = n;
+	sift_down(h, 0);
+
+	return ret;
 }
 
-static void
-bubble_up(struct heap *h, int i)
+void
+heap_print(struct heap *h)
 {
-	while (h->heap_arr[i] > h->heap_arr[(i-1)/2]) {
-		/* Keep swapping node and parent until
-		   node is smaller or equal to parent
-		*/
-		int tmp = h->heap_arr[i];
-		h->heap_arr[i] = h->heap_arr[(i-1)/2];
-		h->heap_arr[(i-1)/2] = tmp;
+	const int size = h->size;
+	const int *heap_arr = h->arr;
+	for (int i = 0; i < size; i++) {
+		printf("%d ", heap_arr[i]);
+	}
+	printf("\n");
+}
+
+void
+sift_up(struct heap *h, int i)
+{
+	int *heap_arr = h->arr;
+	int n = heap_arr[i];
+
+	while (n < heap_arr[(i-1)/2]) {
+		int tmp = heap_arr[(i-1)/2];
+		heap_arr[(i-1)/2] = n;
+		heap_arr[i] = tmp;
 		i = (i-1)/2;
+		if (i < 0) break;
 	}
 }
 
-
-/* Please note: for this function to work,
-   MAXSIZE must be defined as a value that is
-   greater than or equal to (n * 2) + 2 where
-   n is the maximum number of nodes you want
-*/
-static void
-bubble_down(struct heap *h, int i)
+void
+sift_down(struct heap *h, int i)
 {
-	int lc = (i*2) + 1; /* Left child */
-	int rc = (i*2) + 2; /* Right child */
+	int *arr = h->arr;
+	int left = (i*2)+1;
+	int right = (i*2)+2;
+	int j;
+	
 
-	while (h->heap_arr[i] < h->heap_arr[lc] || h->heap_arr[i] < h->heap_arr[rc]) {
-		/* First check that left child is bigger/equal than right child */
-		if (h->heap_arr[lc] >= h->heap_arr[rc]) {
-			/* Then swap parent and left child */
-			int tmp = h->heap_arr[i];
-			h->heap_arr[i] = h->heap_arr[lc];
-			h->heap_arr[lc] = tmp;
+	while (arr[i] > arr[left] || arr[i] > arr[right]) {
+		j = (arr[left] < arr[right] ? left : right);
+		
+			int tmp = arr[j];
+			arr[j] = arr[i];
+			arr[i] = tmp;
+			i = j;
+		left = (i*2)+1;
+		right = (i*2)+2;
 
-			/* Update index */
-			i = lc;
-		} else {
-			/* Otherwise, we swap parent and right child */
-			int tmp = h->heap_arr[i];
-			h->heap_arr[i] = h->heap_arr[rc];
-			h->heap_arr[rc] = tmp;
-
-			/* Update index */
-			i = rc;
-		}
-
-		/* Update children index */
-		lc = (i*2) + 1;
-		rc = (i*2) + 2;
+		if (left >= h->size || right >= h->size) break;
 	}
 }
-
